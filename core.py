@@ -1,3 +1,11 @@
+# ---------------------------------------------------------------------
+# filename : core.py
+# contains code for all functonalities of the app
+# creator : ajay
+# date : 28 nov 2015
+# version 1.0
+#----------------------------------------------------------------------
+
 from flask import Flask, render_template, request, redirect,jsonify, url_for, flash,Response
 from sqlalchemy import create_engine,asc
 from sqlalchemy.orm import sessionmaker
@@ -19,7 +27,7 @@ app = Flask(__name__)
 
 # dependecies to store images for items 
 from werkzeug import secure_filename
-UPLOAD_FOLDER = '/vagrant/music_store/static/cover_art'
+UPLOAD_FOLDER = '/vagrant/item-catalog/static/cover_art'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -531,19 +539,12 @@ def fbconnect():
 # facebook DISCONNECT - Revoke a current user's token and reset their login_session 
 @app.route('/fbdisconnect')
 def fbdisconnect():
-    print 'here Kochiro Kochiro '
     facebook_id = login_session['facebook_id']
     # The access token must me included to successfully logout
-    print 'facebook_id'
     access_token = login_session['access_token']
-    print 'access_token'
     url = 'https://graph.facebook.com/%s/permissions?access_token=%s' % (facebook_id,access_token)
-    print 'url'
     h = httplib2.Http()
-    print 'httplib2'
     result = h.request(url, 'DELETE')[1]
-    print 'result'
-    print 'return'
     return "you have been logged out"
 
 # ----------/ Facebook login--------------#
