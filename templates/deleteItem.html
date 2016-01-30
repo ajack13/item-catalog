@@ -1,0 +1,13 @@
+{% extends "main.html" %}
+{% include "navbar.html" %}
+{% block content %}
+
+<div style="border-radius:0px !important" class="newGenre_cont col-md-6 jumbotron">
+	<h2 style="color:black">Are you sure you want to delete "{{item.name}}"</h2>
+	<form method="POST" action="#">
+		<button type="submit" class="btn btn-default addGenre">Delete Item</button>
+	</form>
+	<a href="{{url_for('home')}}" class="btn btn-default addGenre">Cancel</a>
+</div>
+
+{% endblock %}

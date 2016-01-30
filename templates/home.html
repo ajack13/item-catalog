@@ -1,0 +1,24 @@
+{% extends "main.html" %}
+{% include "navbar.html" %}
+{% block content %}
+
+<div class="col-md-12">
+	<center>
+		<a href="{{url_for('newGenre')}}" class="btn btn-default add_new_genre">ADD NEW GENRE</a>
+	</center>	
+</div>
+
+<div class="col-md-12">
+	<center>
+		<h2 style="color:white">Catalog</h2>
+	</center>
+	<form method='POST' action="#">
+		{% if genres %}
+			{% for genre in genres %}
+				<a href="{{url_for( 'genrePage' ,genre_id = genre.id )}}" class="list-group-item genres">{{genre.name}}</a>
+			{% endfor %}
+		{% endif %}
+	</form>
+</div>
+
+{% endblock %}

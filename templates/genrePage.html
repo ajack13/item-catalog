@@ -1,0 +1,146 @@
+{% extends "main.html" %}
+{% include "navbar.html" %}
+{% block content %}
+<h1 style="color:white"> {{genre.name}}</h1>
+<div class="row col-md-12">
+	{%if editDelete%}
+	<a href="{{url_for('addItem' ,genre_id=genre.id )}}" class="btn btn-default store_btn">Add Item</a>
+	<a href="{{url_for('editGenre' ,genre_id=genre.id )}}" class="btn btn-default store_btn">Edit Genre</a>
+	<a href="{{url_for('deleteGenre' ,genre_id=genre.id )}}" class="btn btn-default store_btn">Delete Genre</a>
+	{% endif %}
+</div>
+<div class="col-md-12">
+	<div class="col-md-4">
+		<div><h3 style="color:#FFF">Albums</h3></div>
+		{%if items%}
+			{%for item in items%}
+				{% if item.p_type == "Album" %}
+					<div class="item_cont">
+						<span class="overlay" data-toggle="modal" data-target=".{{item.id}}"><span class="details">View Details</span></span>
+						<div class="img_holder2">
+							<img class="cover_art img-responsive" src="{{url_for('static', filename='cover_art/'+item.img_name)}}">
+						</div>
+						<div class="item_name">{{item.name}}</div>
+						<!-- <a href="{{url_for('deleteItem',item_id=item.id, genre_id=item.genre_id)}}">Delete</a> -->
+					</div>
+				{% endif %}
+			{%endfor%}
+		{%endif%}
+	</div>
+	
+
+
+	<div class="col-md-4">
+		<h3 style="color:#FFF">Collectables</h3>
+		{%if items%}
+			{%for item in items%}
+				{% if item.p_type == "Collectables" %}
+					<div class="item_cont">
+						<span class="overlay" data-toggle="modal" data-target=".{{item.id}}"><span class="details">View Details</span></span>
+						<div class="img_holder2">
+							<img class="cover_art img-responsive" src="{{url_for('static', filename='cover_art/'+item.img_name)}}">
+						</div>
+						<div class="item_name">{{item.name}}</div>
+						<!-- <a href="{{url_for('deleteItem',item_id=item.id, genre_id=item.genre_id)}}">Delete</a> -->
+					</div>
+				{% endif %}
+			{%endfor%}
+		{%endif%}
+	</div>
+	
+
+
+	<div class="col-md-4">
+		<h3 style="color:#FFF">Art & Poster</h3>
+		{%if items%}
+			{%for item in items%}
+				{% if item.p_type == "Posters & Art" %}
+					<div class="item_cont">
+						<span class="overlay" data-toggle="modal" data-target=".{{item.id}}"><span class="details">View Details</span></span>
+						<div class="img_holder2">
+							<img class="cover_art img-responsive" src="{{url_for('static', filename='cover_art/'+item.img_name)}}">
+						</div>
+						<div class="item_name">{{item.name}}</div>
+						<!-- <a href="{{url_for('deleteItem',item_id=item.id, genre_id=item.genre_id)}}">Delete</a> -->
+					</div>
+				{% endif %}
+			{%endfor%}
+		{%endif%}
+	</div>
+</div>
+
+
+{%if items%}
+	{%for item in items%}
+		<div class="modal fade {{item.id}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  			<div class="modal-dialog modal-lg">
+				<div class="modal-content"> 
+				  <div class="modal-header"> 
+				    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				      <span aria-hidden="true">×</span>
+				    </button> 
+				    <h4 class="modal-title" id="mySmallModalLabel">{{item.name}}</h4>
+				  </div> 
+				  <div class="modal-body"> 
+					<div class="row">
+					  	<div class="col-md-4">
+					  		<div class="img_holder2">
+								<img class="cover_art img-responsive" src="{{url_for('static', filename='cover_art/'+item.img_name)}}">
+							</div>
+					  	</div>
+					  	<div class="col-md-8">
+					  		<div class='row'><h3>Discription</h3></div>
+					  		<div class='row'><h4>{{item.description}}</h4></div>
+					  		<div class="row"><h4>Type : {{item.p_type}}</h4></div>
+					  		<div class="row"><h4>Price : {{item.price}}</h4></div>
+					  	</div>
+					</div>
+				  </div>
+				  <div class="modal-footer">
+				  	{%if not logout%}
+				  		{%if item.user_id == user_id%}
+						  	<a class="btn btn-primary" href="{{url_for('deleteItem',item_id=item.id, genre_id=item.genre_id)}}">Delete</a>
+						  	<a class="btn btn-primary" href="{{url_for('editItem',item_id=item.id, genre_id=item.genre_id)}}">Edit</a>
+				  		{%endif%}
+				  	{%endif%}
+				  </div>
+				</div>
+  			</div>
+		</div>
+	{%endfor%}
+{%endif%}
+
+
+
+<!--  -->
+		<div class="modal fade editDelete" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  			<div class="modal-dialog modal-lg">
+				<div class="modal-content"> 
+				  <div class="modal-header"> 
+				    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				      <span aria-hidden="true">×</span>
+				    </button> 
+				    <h4 class="modal-title" id="mySmallModalLabel">Access Denied</h4>
+				  </div> 
+				  <div class="modal-body"> 
+					<div class="row container">
+						<h4>Only the owner can edit or delete this genre</h4>
+					</div>
+				  </div>
+				  
+				  </div>
+				</div>
+  			</div>
+		</div>
+<script>
+$('div.item_cont').hover(function(){
+	$(this).find('.overlay').css({'display':'initial'});
+	$(this).find('.item_name').css({'color':'#6ac045'});
+});
+$('div.item_cont').mouseleave(function(){
+	$(this).find('.overlay').css({'display':'none'});
+	$(this).find('.item_name').css({'color':'#fff'});
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "main.html" %}
+{% include "navbar.html" %}
+{% block content %}
+<div style="border-radius:0px " class="newGenre_cont col-md-6 jumbotron">
+	<form method="POST" enctype="multipart/form-data" action="#">
+		<div class="col-md-8">
+			<div class="ip">Name</div>
+			<input class="form-control" name="name" type="text" placeholder="Enter Name" value="{{item.name}}"/>
+		
+			<div class="ip">Discription</div>
+			<textarea rows="3" class="form-control" name="disc" type="text" value="">{{item.description}}</textarea>
+		
+			<div class="ip">Price</div>
+			<input style="width:50%" class="form-control" name="price" type="text" value="{{item.price}}"/>
+		
+			<div class="ip">Product type</div>
+			
+			<lable class="ip"><input type="radio" value="Album" name="type" {%if item.p_type=='Album'%}checked{%endif%}></input>Album</lable>
+			
+			<lable class="ip"><input type="radio" value="Collectables" name="type" {%if item.p_type=='Collectables'%}checked{%endif%}></input>Collectables</lable>
+			
+			<lable class="ip"><input type="radio" value="Posters & Art" {%if item.p_type=='Posters & Art'%}checked{%endif%} name="type"></input>Posters & Art</lable>
+		</div>
+		<div class="col-md-4">
+			<input type=file class="btn btn-default" name=file onchange="readURL(this);"/>
+			<div class="img_holder">
+				<input type="hidden" id="img_ip" name="img_name" value=""></input>
+				<img id="cover_art" src="{{url_for('static', filename='cover_art/'+item.img_name)}}" value="" class="img-responsive img-thumbnail" src="">
+			</div>
+        </div>
+        <div class="row">
+        	<button type="submit" class="btn btn-default addGenre">Update Genre</button> 
+			<a href="{{url_for('home')}}" class="btn btn-default addGenre">Cancel</a>
+		</div>
+	</form>
+	
+</div>
+<script>
+  	function readURL(input) {
+        if (input.files && input.files[0]) {
+        	var reader = new FileReader();
+            reader.onload = function (e) {
+               	$('#cover_art').attr('src', e.target.result)
+            	$('#img_ip').attr('value', input.files[0]['name'])
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+{%endblock%}
