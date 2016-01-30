@@ -1,6 +1,7 @@
 {% extends "main.html" %}
 {% include "navbar.html" %}
 {% block content %}
+<!-- add new item html -->
 <div style="border-radius:0px " class="newGenre_cont col-md-6 jumbotron">
 	<form method="POST" enctype="multipart/form-data" action="#">
 		<div class="col-md-8">
@@ -33,6 +34,7 @@
 	
 </div>
 <script>
+	// add cover art image to  html 
   	function readURL(input) {
         if (input.files && input.files[0]) {
         	var reader = new FileReader();

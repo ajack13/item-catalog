@@ -1,3 +1,5 @@
+<!-- navbar of the app -->
+
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -15,9 +17,10 @@
         <a class="pull-right btn btn-primary log" onClick="logout()">Logout</a>
       {%endif%}
     </div>
-  </div><!-- /.container-fluid -->
+  </div>
 </nav>
 
+<!-- flash messages -->
 <div class = 'flash'>
   {% with messages = get_flashed_messages() %}
     {% if messages %}   
@@ -32,6 +35,7 @@
     {% endif %}
   {% endwith %}
 
+<!-- / flash messages  -->
 </div>
 
 <script type="text/javascript">

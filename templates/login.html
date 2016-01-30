@@ -4,10 +4,11 @@
 {% include "navbar.html" %}
 {% endwith %}
 {% block content %}
-
+<!-- login page -->
 <div style="border-radius:0px !important" class="newGenre_cont col-md-6 jumbotron">
 	<h2 style="color:black">Login to music store</h2>
 		
+    <!-- google signin button -->
 		<span id='signinButton' class="btn btn-danger g-signin" data-scope="openid email"
             data-clientid="198993217363-aot6m0nmhvl2ort0v3rbe1kb8rgpdv7c.apps.googleusercontent.com"
             data-redirecturi="postmessage"
@@ -16,7 +17,7 @@
             data-callback="signInCallback"
             data-approvalprompt="force">Login with Google</span>
 		
-		 
+		 <!-- facebook signin button -->
       <fb:login-button scope="public_profile,email" class="btn" onlogin="sendTokenToServer();">
         <a href='javascript:sendTokenToServer()'>Login with Facebook</a>
       </fb:login-button> 

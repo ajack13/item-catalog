@@ -1,7 +1,9 @@
 {% extends "main.html" %}
 {% include "navbar.html" %}
 {% block content %}
+<!-- edit item page -->
 <div style="border-radius:0px " class="newGenre_cont col-md-6 jumbotron">
+	<!-- form  -->
 	<form method="POST" enctype="multipart/form-data" action="#">
 		<div class="col-md-8">
 			<div class="ip">Name</div>
@@ -33,9 +35,11 @@
 			<a href="{{url_for('home')}}" class="btn btn-default addGenre">Cancel</a>
 		</div>
 	</form>
+	<!-- /form -->
 	
 </div>
 <script>
+	// add image to html
   	function readURL(input) {
         if (input.files && input.files[0]) {
         	var reader = new FileReader();

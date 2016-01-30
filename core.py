@@ -13,14 +13,15 @@ import requests
 import dicttoxml
 import uuid
 
+# client id from google
 CLIENT_ID = json.loads(open('client_secret.json', 'r').read())['web']['client_id']
+app = Flask(__name__)
+
+# dependecies to store images for items 
+from werkzeug import secure_filename
 UPLOAD_FOLDER = '/vagrant/music_store/static/cover_art'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-from werkzeug import secure_filename
-
-
 
 #Connect to Database and create database session
 engine = create_engine('sqlite:///music_store.db')
@@ -28,9 +29,16 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-# render home template 
+
 @app.route('/')
 @app.route('/home/')
+''' renders the home template along with the list of geners 
+    args  None
+    
+    returns  
+    genre : curser of genre from database
+    logout :if the user session exists( boolean )
+''' 
 def home():
 	logout = False
 	if 'username' not in login_session:
@@ -38,8 +46,16 @@ def home():
 	genres = session.query(Genre).order_by(asc(Genre.name))
 	return render_template('home.html',genres=genres,logout=logout)
 
-# Render page to add new genre 
+
+
 @app.route('/home/newGenre/', methods=['POST','GET'])
+''' Render page to add new genre
+    args : none
+
+    returns
+    newGenre template
+    logout : if user session exists
+''' 
 def newGenre():
     if 'username' not in login_session:
         return redirect(url_for('login'))
@@ -52,8 +68,19 @@ def newGenre():
     else:
 		return render_template('newGenre.html',logout=False)
 
-# genre page
 @app.route('/home/<int:genre_id>/',methods=['POST','GET'])
+''' Render genre page with list of items  
+    args : 
+    genre_id : id of the genre
+
+    returns
+    genrePage template
+    logout : if user session exists(boolean)
+    genre : genre name
+    items : cursor containing items under this genre_id
+    user_id : email id of the user
+    editDelete : permission to edit or delete (boolean) 
+''' 
 def genrePage(genre_id):
     logout = True
     user_id = None
@@ -70,7 +97,19 @@ def genrePage(genre_id):
                             items=items,logout=logout,
                             user_id=user_id,editDelete=editDelete)
 
+
+
 @app.route('/home/<int:genre_id>/delete/' , methods=['POST','GET'])
+''' Render deleteGenre page 
+    function : delete genre and all its items  
+    
+    args : 
+    genre_id : id of the genre
+
+    returns
+    home/deleteGenre template
+    logout : if user session exists(boolean)
+''' 
 def deleteGenre(genre_id):
 	if 'username' not in login_session:
 		return redirect(url_for('login'))
@@ -88,7 +127,21 @@ def deleteGenre(genre_id):
         else:
             return render_template('deleteGenre.html',genre=genre,logout=False)
 
+
+
+
 @app.route('/home/<int:genre_id>/edit/' , methods=['POST','GET'])
+''' Render editGenre page 
+    function : update genre name  
+    
+    args : 
+    genre_id : id of the genre
+
+    returns
+    home/editGenre template
+    logout : if user session exists(boolean)
+    genre : genre name
+''' 
 def editGenre(genre_id):
 	if 'username' not in login_session:
 		return redirect(url_for('login'))
@@ -99,7 +152,21 @@ def editGenre(genre_id):
 	else:
 		return render_template('editGenre.html',genre=genre,logout=False)
 
+
+
 @app.route('/home/<int:genre_id>/<int:item_id>/edit', methods = ['POST','GET'])
+''' Render editItem page 
+    function : update item information  
+    
+    args : 
+    genre_id : id of the genre
+    item_id : id of the item to be updated
+
+    returns
+    home/editItem template
+    logout : if user session exists(boolean)
+    genre : cursor of the item
+''' 
 def editItem(genre_id,item_id):
 	if 'username' not in login_session:
 		return redirect(url_for('login'))
@@ -127,7 +194,20 @@ def editItem(genre_id,item_id):
 		
 		return render_template('editItem.html',item=item,logout=False)
 
+
+
 @app.route('/home/<int:genre_id>/addItem/' , methods=['POST','GET'])
+''' Render additem page 
+    function : create new item  
+    
+    args : 
+    genre_id : id of the genre
+
+    returns
+    home/addItem template
+    logout : if user session exists(boolean)
+''' 
+
 def addItem(genre_id):
    if 'username' not in login_session:
       return redirect(url_for('login'))
@@ -147,6 +227,7 @@ def addItem(genre_id):
       except:
           img_name = 'noimage.jpg'
       user_id = getUserID(login_session['email'])
+      # create new item
       newItem = Albums(name = name,description= disc,price=price,p_type=p_type,img_name=img_name,genre_id=genre_id,user_id=user_id)
       session.add(newItem)
       session.commit()
@@ -155,8 +236,20 @@ def addItem(genre_id):
    else:
 		return render_template('addItem.html',logout=False)
 
-#delete Item
+
 @app.route('/home/<int:genre_id>/addItem/<int:item_id>/',methods=["GET","POST"])
+''' Render deleteItem page 
+    function : Delete an item  
+    
+    args : 
+    genre_id : id of the genre
+    item_id : id of the item
+
+    returns
+    home/deleteItem template
+    logout : if user session exists(boolean)
+    item : name of the item that is deleated
+''' 
 def deleteItem(genre_id,item_id):
     if 'username' not in login_session:
         return redirect(url_for('login'))
@@ -170,7 +263,18 @@ def deleteItem(genre_id,item_id):
     else:
         return render_template('deleteItem.html',item=item,logout=False)
 
+
 @app.route('/login/',methods=['GET','POST'])
+''' Render login page 
+    function : create unique id for session and provide login functionalities  
+    
+    args : None
+
+    returns
+    home/login template
+    logout : if user session exists(boolean)
+    state : unique string 
+''' 
 def login():
     logout = True
     if 'username' in login_session.keys():
@@ -181,26 +285,60 @@ def login():
 
 
 @app.route('/home/JSON')
+''' Render json data for the genre page 
+    args : None
+
+    returns
+    Json data
+''' 
 def genreJSON():
     genre = session.query(Genre).all()
     return jsonify(genre= [r.serialize for r in genre])
 
+
 @app.route('/home/<int:genre_id>/JSON')
+''' Render json data for the items page 
+    args : genre id
+
+    returns
+    Json data
+'''
 def itemJSON(genre_id):
 	item = session.query(Albums).filter_by(genre_id=genre_id).all()
 	return jsonify(albums = [r.serialize for r in item])
 
+
+
 @app.route('/home/XML')
+''' Render XML data for the genre page 
+    args : None
+
+    returns
+    Json data
+'''
 def genreXml():
     genre = session.query(Genre).all()
     return  Response(dicttoxml.dicttoxml( [r.serialize for r in genre] ), mimetype='text/xml')  
 
+
 @app.route('/home/<int:genre_id>/XML')
+''' Render json data for the genre page 
+    args : genre_id
+
+    returns
+    Json data
+'''
 def itemXml(genre_id):
     item = session.query(Albums).filter_by(genre_id=genre_id).all()
     return Response( dicttoxml.dicttoxml ( [r.serialize for r in item] ),mimetype='text/xml' )
 
+
 @app.route('/gconnect', methods=['POST'])
+''' login using gmail 
+    
+    returns:
+    user credentilas (name,email,image link)
+'''
 def gconnect():
     # Validate state token
     if request.args.get('state') != login_session['state']:
@@ -283,12 +421,10 @@ def gconnect():
     output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
-    print 'THe login bitchers',login_session
     return output
 
 
-    # DISCONNECT - Revoke a current user's token and reset their login_session
-
+#Google DISCONNECT - Revoke a current user's token and reset their login_session
 @app.route('/gdisconnect')
 def gdisconnect():
     print 'In gdisconnect access token is %s', login_session
@@ -392,6 +528,7 @@ def fbconnect():
     return output
 
 
+# facebook DISCONNECT - Revoke a current user's token and reset their login_session 
 @app.route('/fbdisconnect')
 def fbdisconnect():
     print 'here Kochiro Kochiro '
@@ -410,8 +547,13 @@ def fbdisconnect():
     return "you have been logged out"
 
 # ----------/ Facebook login--------------#
-# User Helper Functions
-# ------------disconnect------------------#
+
+
+
+
+
+# ------------ User Helper Functions -----------------#
+
 # Disconnect based on provider
 @app.route('/disconnect')
 def disconnect():
@@ -428,15 +570,18 @@ def disconnect():
         del login_session['email']
         del login_session['picture']
         del login_session['provider']
-        # flash("You have successfully been logged out.")
-        # return redirect(url_for('showRestaurants'))
-    # else:
-        # flash("You were not logged in")
-        # return redirect(url_for('showRestaurants'))
     return 'Successfully logged out'
 
 
+
 def createUser(login_session):
+'''
+    function : create user
+    args : login_session 
+
+    returns :
+    user_id : unique id of the created user 
+'''
     newUser = User(name=login_session['username'], email=login_session[
                    'email'], picture=login_session['picture'])
     session.add(newUser)
@@ -444,12 +589,12 @@ def createUser(login_session):
     user = session.query(User).filter_by(email=login_session['email']).one()
     return user.id
 
-
+# gets user info based on email id
 def getUserInfo(user_id):
     user = session.query(User).filter_by(id=user_id).one()
     return user
 
-
+# get user id based on email id
 def getUserID(email):
     try:
         user = session.query(User).filter_by(email=email).one()
@@ -457,8 +602,8 @@ def getUserID(email):
     except:
         return None
 
-
+# run flask on port 8000
 if __name__== "__main__":
- 	app.secret_key = 'super_secret_key'
+ 	app.secret_key = 'secret_key'
   	app.debug = True
   	app.run(host = '0.0.0.0', port = 8000)

@@ -13,11 +13,13 @@
 		<h2 style="color:white">Catalog</h2>
 	</center>
 	<form method='POST' action="#">
+		<!-- genre names -->
 		{% if genres %}
 			{% for genre in genres %}
 				<a href="{{url_for( 'genrePage' ,genre_id = genre.id )}}" class="list-group-item genres">{{genre.name}}</a>
 			{% endfor %}
 		{% endif %}
+		<!-- /genre names -->
 	</form>
 </div>
 

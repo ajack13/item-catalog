@@ -1,4 +1,4 @@
-/*-------------------bootstrap override-------------------*/
+
 .genres{
 	background: inherit !important;
 	color : #fff !important;
@@ -47,7 +47,6 @@
 	color:#000 !important;
 }
 
-/*----------------bootstrap override over-----------------*/
 .app_body{
 	background-color: #1d1d1d !important;
 }
