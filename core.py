@@ -178,7 +178,6 @@ def editItem(genre_id,item_id):
            filename = secure_filename(file.filename)
            file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
 	   if request.form['img_name']:
-            os.remove( os.path.join(app.config['UPLOAD_FOLDER'],item.img_name) ) 
             item.img_name = request.form['img_name']
 	   if request.form['name']:
 	   	   item.name = request.form['name']
