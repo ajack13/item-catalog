@@ -32,13 +32,14 @@ session = DBSession()
 
 @app.route('/')
 @app.route('/home/')
-''' renders the home template along with the list of geners 
-    args  None
+# ''' 
+#     # renders the home template along with the list of geners 
+#     # args  None
     
-    returns  
-    genre : curser of genre from database
-    logout :if the user session exists( boolean )
-''' 
+#     # returns  
+#     # genre : curser of genre from database
+#     # logout :if the user session exists( boolean )
+# ''' 
 def home():
 	logout = False
 	if 'username' not in login_session:
@@ -49,13 +50,13 @@ def home():
 
 
 @app.route('/home/newGenre/', methods=['POST','GET'])
-''' Render page to add new genre
-    args : none
+# ''' Render page to add new genre
+#     args : none
 
-    returns
-    newGenre template
-    logout : if user session exists
-''' 
+#     returns
+#     newGenre template
+#     logout : if user session exists
+# ''' 
 def newGenre():
     if 'username' not in login_session:
         return redirect(url_for('login'))
@@ -69,18 +70,18 @@ def newGenre():
 		return render_template('newGenre.html',logout=False)
 
 @app.route('/home/<int:genre_id>/',methods=['POST','GET'])
-''' Render genre page with list of items  
-    args : 
-    genre_id : id of the genre
+# ''' Render genre page with list of items  
+#     args : 
+#     genre_id : id of the genre
 
-    returns
-    genrePage template
-    logout : if user session exists(boolean)
-    genre : genre name
-    items : cursor containing items under this genre_id
-    user_id : email id of the user
-    editDelete : permission to edit or delete (boolean) 
-''' 
+#     returns
+#     genrePage template
+#     logout : if user session exists(boolean)
+#     genre : genre name
+#     items : cursor containing items under this genre_id
+#     user_id : email id of the user
+#     editDelete : permission to edit or delete (boolean) 
+# ''' 
 def genrePage(genre_id):
     logout = True
     user_id = None
@@ -100,16 +101,16 @@ def genrePage(genre_id):
 
 
 @app.route('/home/<int:genre_id>/delete/' , methods=['POST','GET'])
-''' Render deleteGenre page 
-    function : delete genre and all its items  
+# ''' Render deleteGenre page 
+#     function : delete genre and all its items  
     
-    args : 
-    genre_id : id of the genre
+#     args : 
+#     genre_id : id of the genre
 
-    returns
-    home/deleteGenre template
-    logout : if user session exists(boolean)
-''' 
+#     returns
+#     home/deleteGenre template
+#     logout : if user session exists(boolean)
+# ''' 
 def deleteGenre(genre_id):
 	if 'username' not in login_session:
 		return redirect(url_for('login'))
@@ -131,17 +132,17 @@ def deleteGenre(genre_id):
 
 
 @app.route('/home/<int:genre_id>/edit/' , methods=['POST','GET'])
-''' Render editGenre page 
-    function : update genre name  
+# ''' Render editGenre page 
+#     function : update genre name  
     
-    args : 
-    genre_id : id of the genre
+#     args : 
+#     genre_id : id of the genre
 
-    returns
-    home/editGenre template
-    logout : if user session exists(boolean)
-    genre : genre name
-''' 
+#     returns
+#     home/editGenre template
+#     logout : if user session exists(boolean)
+#     genre : genre name
+# ''' 
 def editGenre(genre_id):
 	if 'username' not in login_session:
 		return redirect(url_for('login'))
@@ -155,18 +156,18 @@ def editGenre(genre_id):
 
 
 @app.route('/home/<int:genre_id>/<int:item_id>/edit', methods = ['POST','GET'])
-''' Render editItem page 
-    function : update item information  
+# ''' Render editItem page 
+#     function : update item information  
     
-    args : 
-    genre_id : id of the genre
-    item_id : id of the item to be updated
+#     args : 
+#     genre_id : id of the genre
+#     item_id : id of the item to be updated
 
-    returns
-    home/editItem template
-    logout : if user session exists(boolean)
-    genre : cursor of the item
-''' 
+#     returns
+#     home/editItem template
+#     logout : if user session exists(boolean)
+#     genre : cursor of the item
+# ''' 
 def editItem(genre_id,item_id):
 	if 'username' not in login_session:
 		return redirect(url_for('login'))
@@ -197,16 +198,16 @@ def editItem(genre_id,item_id):
 
 
 @app.route('/home/<int:genre_id>/addItem/' , methods=['POST','GET'])
-''' Render additem page 
-    function : create new item  
+# ''' Render additem page 
+#     function : create new item  
     
-    args : 
-    genre_id : id of the genre
+#     args : 
+#     genre_id : id of the genre
 
-    returns
-    home/addItem template
-    logout : if user session exists(boolean)
-''' 
+#     returns
+#     home/addItem template
+#     logout : if user session exists(boolean)
+# ''' 
 
 def addItem(genre_id):
    if 'username' not in login_session:
@@ -238,18 +239,18 @@ def addItem(genre_id):
 
 
 @app.route('/home/<int:genre_id>/addItem/<int:item_id>/',methods=["GET","POST"])
-''' Render deleteItem page 
-    function : Delete an item  
+# ''' Render deleteItem page 
+#     function : Delete an item  
     
-    args : 
-    genre_id : id of the genre
-    item_id : id of the item
+#     args : 
+#     genre_id : id of the genre
+#     item_id : id of the item
 
-    returns
-    home/deleteItem template
-    logout : if user session exists(boolean)
-    item : name of the item that is deleated
-''' 
+#     returns
+#     home/deleteItem template
+#     logout : if user session exists(boolean)
+#     item : name of the item that is deleated
+# ''' 
 def deleteItem(genre_id,item_id):
     if 'username' not in login_session:
         return redirect(url_for('login'))
@@ -265,16 +266,16 @@ def deleteItem(genre_id,item_id):
 
 
 @app.route('/login/',methods=['GET','POST'])
-''' Render login page 
-    function : create unique id for session and provide login functionalities  
+# ''' Render login page 
+#     function : create unique id for session and provide login functionalities  
     
-    args : None
+#     args : None
 
-    returns
-    home/login template
-    logout : if user session exists(boolean)
-    state : unique string 
-''' 
+#     returns
+#     home/login template
+#     logout : if user session exists(boolean)
+#     state : unique string 
+# ''' 
 def login():
     logout = True
     if 'username' in login_session.keys():
@@ -285,24 +286,24 @@ def login():
 
 
 @app.route('/home/JSON')
-''' Render json data for the genre page 
-    args : None
+# ''' Render json data for the genre page 
+#     args : None
 
-    returns
-    Json data
-''' 
+#     returns
+#     Json data
+# ''' 
 def genreJSON():
     genre = session.query(Genre).all()
     return jsonify(genre= [r.serialize for r in genre])
 
 
 @app.route('/home/<int:genre_id>/JSON')
-''' Render json data for the items page 
-    args : genre id
+# ''' Render json data for the items page 
+#     args : genre id
 
-    returns
-    Json data
-'''
+#     returns
+#     Json data
+# '''
 def itemJSON(genre_id):
 	item = session.query(Albums).filter_by(genre_id=genre_id).all()
 	return jsonify(albums = [r.serialize for r in item])
@@ -310,35 +311,35 @@ def itemJSON(genre_id):
 
 
 @app.route('/home/XML')
-''' Render XML data for the genre page 
-    args : None
+# ''' Render XML data for the genre page 
+#     args : None
 
-    returns
-    Json data
-'''
+#     returns
+#     Json data
+# '''
 def genreXml():
     genre = session.query(Genre).all()
     return  Response(dicttoxml.dicttoxml( [r.serialize for r in genre] ), mimetype='text/xml')  
 
 
 @app.route('/home/<int:genre_id>/XML')
-''' Render json data for the genre page 
-    args : genre_id
+# ''' Render json data for the genre page 
+#     args : genre_id
 
-    returns
-    Json data
-'''
+#     returns
+#     Json data
+# '''
 def itemXml(genre_id):
     item = session.query(Albums).filter_by(genre_id=genre_id).all()
     return Response( dicttoxml.dicttoxml ( [r.serialize for r in item] ),mimetype='text/xml' )
 
 
 @app.route('/gconnect', methods=['POST'])
-''' login using gmail 
+# ''' login using gmail 
     
-    returns:
-    user credentilas (name,email,image link)
-'''
+#     returns:
+#     user credentilas (name,email,image link)
+# '''
 def gconnect():
     # Validate state token
     if request.args.get('state') != login_session['state']:
@@ -575,13 +576,13 @@ def disconnect():
 
 
 def createUser(login_session):
-'''
-    function : create user
-    args : login_session 
+# '''
+#     function : create user
+#     args : login_session 
 
-    returns :
-    user_id : unique id of the created user 
-'''
+#     returns :
+#     user_id : unique id of the created user 
+# '''
     newUser = User(name=login_session['username'], email=login_session[
                    'email'], picture=login_session['picture'])
     session.add(newUser)
