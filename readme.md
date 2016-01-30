@@ -32,6 +32,7 @@ An application that provides a list of items within a variety of categories as w
 ```
 ### Required Libraries and dependencies
 1) Git (optional)
+
 2) A gmail or facebook id 
 ### Installation
 
